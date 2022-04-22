@@ -53,11 +53,32 @@ cuentas.push(new Cuenta("Eva Farfan" , 90000, 13409461, 1992))
 
 function ingreso(){
     let usuario = prompt("Ingrese su usuario")
-    for (const user of cuentas){
-        console.log(cuentas.includes(usuario).user);
+
+    for(i=0; i<cuentas.length; i++){
+        if(usuario == cuentas[i].user){
+            password(i);
+            console.log(i)
+            break;
+        }else{
+            console.log("else" + i)
+        //     alert("Usuario incorrecto.\nVuelva a intentarlo")
+        }
     }
-    let pass = prompt("Ingrese su contraseña")
-    
+    console.log(`dasda${i}`)
+    while(usuario != cuentas[i].user){
+        ingreso();
+    }
+}
+
+function password(pass){
+    let pwrd = prompt("Ingrese su contraseña")
+    if(pwrd == cuentas[pass].pass){
+        console.log("ENTRASTE")
+        alert(`Bienvenido. ${cuentas[pass].titular}`)        
+    }else{
+        alert("Contraseña erronea")
+        password(pass);
+    }
 }
 
 function inicio(){
