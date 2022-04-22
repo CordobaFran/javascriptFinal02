@@ -27,6 +27,7 @@ class Cuenta{
             inicio();
         } else {
             alert("Ingrese un monto válido");
+            ingresar();
         }
     }
     retirar(cantidad){
@@ -36,6 +37,8 @@ class Cuenta{
             inicio();
         }else {
             alert("Ud no tiene fondos suficientes\nIntente con otro monto.");
+            retirar();
+
         }
     }
 }
