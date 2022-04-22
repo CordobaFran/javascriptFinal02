@@ -48,10 +48,6 @@ cuentas.push(new Cuenta("Franco Cordoba", 5000, 36784909, 1905))
 cuentas.push(new Cuenta("Ana Reyes", 20000, 94475963, 2056))
 cuentas.push(new Cuenta("Gilberto Cordoba" , 60000, 14598212, 2012))
 cuentas.push(new Cuenta("Eva Farfan" , 90000, 13409461, 1992))
-// const Cuenta01 = new Cuenta("Franco Cordoba", 5000)
-
-
-
 
 function inicio(){
     let opcion = prompt(`Ingrese una opción para continuar:
@@ -73,7 +69,7 @@ function inicio(){
             inicio()
             break;
         case "d":
-            Cuentas[1].salir();
+            cuentas[1].salir();
             break;
         default:
             alert("Ingresó una opción incorrecta.\nIntentelo nuevamente")
