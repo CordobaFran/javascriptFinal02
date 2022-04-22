@@ -51,7 +51,14 @@ cuentas.push(new Cuenta("Eva Farfan" , 90000, 13409461, 1992))
 // const Cuenta01 = new Cuenta("Franco Cordoba", 5000)
 
 
-
+function ingreso(){
+    let usuario = prompt("Ingrese su usuario")
+    for (const user of cuentas){
+        console.log(cuentas.includes(usuario).user);
+    }
+    let pass = prompt("Ingrese su contraseña")
+    
+}
 
 function inicio(){
     let opcion = prompt(`Ingrese una opción para continuar:
@@ -73,7 +80,7 @@ function inicio(){
             inicio()
             break;
         case "d":
-            Cuentas[1].salir();
+            cuentas[1].salir();
             break;
         default:
             alert("Ingresó una opción incorrecta.\nIntentelo nuevamente")
@@ -93,5 +100,5 @@ function retirar(){
     cuentas[1].retirar(cantidad);
 }
 
-
+ingreso();
 inicio();
