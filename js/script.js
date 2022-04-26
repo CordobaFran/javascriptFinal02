@@ -1,5 +1,6 @@
 let cantidad;
 let activeUser;
+let exit;
 class Cuenta{
     constructor(titular, cuenta, user, pass){
         this.titular = titular;
@@ -49,7 +50,7 @@ function ingreso(){
             userFiltered = cuentas.find((el)=> el.user === usuario);
         }while(userFiltered == undefined);
         activeUser = userFiltered;
-        password(activeUser);        
+        password(activeUser);
     }else{
         activeUser = userFiltered;
         password(activeUser);
@@ -59,13 +60,15 @@ function ingreso(){
 }
 
 function password(userAct){
-    let pwrd = prompt("Ingrese su contraseña");
+    let pwrd = prompt(`${userAct.titular}\nIngrese su contraseña o digite "salir"`);
     if(pwrd == userAct.pass){
         console.log("ENTRASTE");
-        alert(`Bienvenido/a:\n${userAct.titular}`);     
+        alert(`Bienvenido/a:\n${userAct.titular}`);
+    }else if(pwrd.toLowerCase() == "salir"){
+        salir()
     }else{
-        alert("Contraseña erronea");
-        password(userAct.pass);
+        alert(`CONTRASEÑA ERRONEA\n${userAct.titular}\nIngrese su contraseña o digite "salir"`);   
+        password(userAct);
     }
 }
 
@@ -107,7 +110,12 @@ function retirar(){
 
 function salir(){
     alert("Muchas gracias por elegirnos.\nHasta luego");
+    return exit = true;
 }
 
 ingreso();
-inicio();
+
+if(exit == true){
+}else{
+    inicio();
+}
