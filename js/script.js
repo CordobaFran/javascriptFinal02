@@ -1,14 +1,5 @@
-// 3) Crear una clase llamada Cuenta que contenga los siguientes atributos: titular (que
-//     es una persona) y cantidad (que pueden ser decimales). Crear su constructor y tiene
-//     que poseer los siguientes métodos:
-//     a) mostrar() que muestra los datos de la cuenta
-//     b) ingresar(cantidad) ingresa cantidad de dinero a la cuenta (Si la cantidad es
-//     negativa no se hace nada)
-//     c) retirar(cantidad) se retira una cantidad de la cuenta.
-
 let cantidad;
 let activeUser;
-
 class Cuenta{
     constructor(titular, cuenta, user, pass){
         this.titular = titular;
@@ -38,7 +29,6 @@ class Cuenta{
         }else {
             alert("Ud no tiene fondos suficientes\nIntente con otro monto.");
             retirar();
-
         }
     }
 }
@@ -50,36 +40,32 @@ cuentas.push(new Cuenta("Gilberto Cordoba" , 60000, 14598212, 2012));
 cuentas.push(new Cuenta("Eva Farfan" , 90000, 13409461, 1992));
 
 function ingreso(){
-    let usuario;
-    let login;
+    let usuario = parseInt(prompt("Ingrese su usuario"))
+    let userFiltered = cuentas.find((el)=> el.user === usuario);
 
-    do{
-        usuario  = prompt("Ingrese su usuario");
-        for(i=0; i<cuentas.length; i++){
-            if(usuario == cuentas[i].user){
-                login = true;
-                password(i);                
-                break;
-            }else{
-                login = false;
-            }
-        }
-        if(login == false){
-            alert("Usuario incorrecto.\nIntentelo nuevamente.");
-        }
-    }while(login == false);
-    
-    return i;  
+    if (userFiltered == undefined) {
+        do{
+            usuario = parseInt(prompt("Usuario incorrecto, Ingreselo de nuevo"));
+            userFiltered = cuentas.find((el)=> el.user === usuario);
+        }while(userFiltered == undefined);
+        activeUser = userFiltered;
+        password(activeUser);        
+    }else{
+        activeUser = userFiltered;
+        password(activeUser);
+    }
+
+    return activeUser = userFiltered;
 }
 
-function password(pass){
+function password(userAct){
     let pwrd = prompt("Ingrese su contraseña");
-    if(pwrd == cuentas[pass].pass){
+    if(pwrd == userAct.pass){
         console.log("ENTRASTE");
-        alert(`Bienvenido. ${cuentas[pass].titular}`);     
+        alert(`Bienvenido/a:\n${userAct.titular}`);     
     }else{
         alert("Contraseña erronea");
-        password(pass);
+        password(userAct.pass);
     }
 }
 
@@ -91,7 +77,7 @@ function inicio(){
             d) Salir`).toLowerCase(); 
     switch (opcion) {
         case "a":
-            cuentas[activeUser].mostrar();
+            activeUser.mostrar();
             break;
         case "b":
             ingresar();
@@ -111,17 +97,17 @@ function inicio(){
 
 function ingresar(){
     cantidad = parseInt(prompt("Ingrese la cantidad de dinero a depositar"));
-    cuentas[activeUser].ingresar(cantidad);
+    activeUser.ingresar(cantidad);
 }
 
 function retirar(){
     cantidad = parseInt(prompt("ingrese la cantidad de dinero a retirar"));
-    cuentas[activeUser].retirar(cantidad);
+    activeUser.retirar(cantidad);
 }
 
 function salir(){
     alert("Muchas gracias por elegirnos.\nHasta luego");
 }
 
-activeUser = ingreso();
+ingreso();
 inicio();
