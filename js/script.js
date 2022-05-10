@@ -1,121 +1,112 @@
 let cantidad;
-let activeUser;
-let exit;
+let userLocal;
+
 class Cuenta{
-    constructor(titular, cuenta, user, pass){
+    constructor(titular, cuenta, user, pass, numCuenta, nombCuenta){
         this.titular = titular;
         this.cantidad = cuenta;
         this.user = user;
         this.pass = pass;
-    }
-    mostrar(){
-        alert(`Nombre de titular: ${this.titular}\nMonto en la cuenta: $${this.cantidad}`);
-        inicio();
-    }
-    ingresar(cantidad){  
-        if (cantidad > 0){
-            this.cantidad += cantidad;
-            alert(`Ud. ha ingresado ${cantidad} a su cuenta`);
-            inicio();
-        } else {
-            alert("Ingrese un monto válido");
-            ingresar();
-        }
-    }
-    retirar(cantidad){
-        if(cantidad <= this.cantidad){
-            this.cantidad = this.cantidad - cantidad;
-            alert(`Ud. ha retirado ${cantidad}`);
-            inicio();
-        }else {
-            alert("Ud no tiene fondos suficientes\nIntente con otro monto.");
-            retirar();
-        }
+        this.numCuenta = numCuenta;
+        this.nombCuenta = nombCuenta;
     }
 }
 
 const cuentas =[]
-cuentas.push(new Cuenta("Franco Cordoba", 5000, 36784909, 1905));
-cuentas.push(new Cuenta("Ana Reyes", 20000, 94475963, 2056));
-cuentas.push(new Cuenta("Gilberto Cordoba" , 60000, 14598212, 2012));
-cuentas.push(new Cuenta("Eva Farfan" , 90000, 13409461, 1992));
+cuentas.push(new Cuenta("Franco Damian Cordoba", 5000, 36784909, 1905, "01-123456-10", "Caja de Ahorro"));
+cuentas.push(new Cuenta("Ana Reyes", 20000, 94475963, 2056, "01-753213-10", "Caja de Ahorro"));
+cuentas.push(new Cuenta("Gilberto Cordoba" , 60000, 14598212, 2012, "01-123453-10", "Caja de Ahorro"));
+cuentas.push(new Cuenta("Eva Farfan" , 90000, 13409461, 1992, "01-437834-10", "Caja de Ahorro"));
 
-function ingreso(){
-    let usuario = parseInt(prompt("Ingrese su usuario"))
-    let userFiltered = cuentas.find((el)=> el.user === usuario);
-
-    if (userFiltered == undefined) {
-        do{
-            usuario = parseInt(prompt("Usuario incorrecto, Ingreselo de nuevo"));
-            userFiltered = cuentas.find((el)=> el.user === usuario);
-        }while(userFiltered == undefined);
-        activeUser = userFiltered;
-        password(activeUser);
-    }else{
-        activeUser = userFiltered;
-        password(activeUser);
-    }
-
-    return activeUser = userFiltered;
+function currency(number){
+    return new Intl.NumberFormat('eu-ES', { style: 'currency', currency: 'ARS' }).format(number);
 }
 
-function password(userAct){
-    let pwrd = prompt(`${userAct.titular}\nIngrese su contraseña o digite "salir"`);
-    if(pwrd == userAct.pass){
-        console.log("ENTRASTE");
-        alert(`Bienvenido/a:\n${userAct.titular}`);
-    }else if(pwrd.toLowerCase() == "salir"){
-        salir()
+function btnIngresar(){
+    //LISTENER DE BOTON INGRESAR EN LOGIN
+    let ingresarBtn = document.getElementById("ingresar");
+    ingresarBtn.addEventListener("click", ()=>{getUser()});
+}
+
+function getUser(){
+    //OBTENCION DATOS DE FORMULARIO
+    let userID = document.getElementById("user").value;
+    let userPass = document.getElementById("password").value;
+
+    //FILTRADO DE USUARIOS SEGUN LO INGRESADO EN USERID
+    let userFilteredJSON = JSON.stringify(cuentas.find((el)=> el.user == userID));
+    let userFiltered = JSON.parse(userFilteredJSON);
+    
+    //VALIDACION DE USUARIO Y CONTRASEÑA
+    if(userID == userFiltered.user && parseInt(userPass) === userFiltered.pass){
+        localStorage.setItem("usuario", userFilteredJSON);
+        window.location.pathname = '../views/inicio.html';
     }else{
-        alert(`CONTRASEÑA ERRONEA\n${userAct.titular}\nIngrese su contraseña o digite "salir"`);   
-        password(userAct);
+        let incorrect = document.getElementById("userPassIncorrect")
+        incorrect.innerHTML = ""
+        incorrect.append("USUARIO O CONTRASEÑA INCORRECTA")
     }
 }
 
 function inicio(){
-    let opcion = prompt(`Ingrese una opción para continuar:
-            a) Mostrar cuenta
-            b) Ingresar dinero
-            c) Retirar dinero
-            d) Salir`).toLowerCase(); 
-    switch (opcion) {
-        case "a":
-            activeUser.mostrar();
-            break;
-        case "b":
-            ingresar();
-            break;
-        case "c":
-            retirar();
-            break;
-        case "d":
-            salir();
-            break;
-        default:
-            alert("Ingresó una opción incorrecta.\nIntentelo nuevamente");
-            inicio();
-            break;
-    }
+    //EXTRACCION DATOS USUARIO LOGUEADO
+    let userFiltered = JSON.parse(localStorage.getItem("usuario"));
+    
+    //COLOCACION DATOS DE USUARIO EN INICIO
+    let divDatos = document.getElementById("div__inicio__datos")
+        divDatos.innerHTML = "";
+    let parrafo = document.createElement("p");
+        parrafo.innerHTML = `<h4 class="font-weight-bolder h2">${userFiltered.titular}</h4>
+                            <h4>Cuenta N° ${userFiltered.numCuenta}</h4>
+                            <h4>${currency(userFiltered.cantidad)}</h4>`;
+        divDatos.append(parrafo);
 }
 
-function ingresar(){
-    cantidad = parseInt(prompt("Ingrese la cantidad de dinero a depositar"));
-    activeUser.ingresar(cantidad);
+function cuenta(){
+    //EXTRACCION DATOS USUARIO LOGUEADO
+    let userFiltered = JSON.parse(localStorage.getItem("usuario"));
+
+    //TITULAR DE LA PAGINA
+    let cuentaH1 = document.getElementById("cuentaH1")
+        cuentaH1.innerHTML = "";
+        cuentaH1.innerHTML = `CUENTAS DE ${(userFiltered.titular).toUpperCase()}`; 
+
+    //DATOS DE CUENTA
+    let cuentaBox = document.getElementById("cuentaBox")
+        cuentaBox.innerHTML = "";
+    let box = document.createElement("p");
+    box.innerHTML = `<h4 class="box__text text-center pt-3 mt-5 mb-5 h2">${userFiltered.nombCuenta}</h4>
+                    <h4 class="box__text text-center mt-3 font-weight-bolder h1">${currency(userFiltered.cantidad)}</h4>
+                    <h4 class="box__text text-center mt-3 h3">Cuenta N° ${userFiltered.numCuenta}</h4>`;
+    cuentaBox.append(box);
 }
 
-function retirar(){
-    cantidad = parseInt(prompt("ingrese la cantidad de dinero a retirar"));
-    activeUser.retirar(cantidad);
+function closeSesion(){
+    let cerrarSesion = document.getElementById("cerrarSesion");
+
+    //BORRADO DE STORAGE POR CIERRE DE SESION Y REDIRECCIONADO A LOGIN
+    cerrarSesion.addEventListener("click", (e)=>{
+        e.preventDefault();
+        window.location.pathname = '../index.html';
+        localStorage.clear();
+    });
 }
 
-function salir(){
-    alert("Muchas gracias por elegirnos.\nHasta luego");
-    return exit = true;
+//SELECCION DE FUNCION POR CADA PAG CON ID DE BODY
+let pages = document.body.id;
+switch (pages) {
+    case "index":
+        btnIngresar();
+        break;
+    case "inicio" :
+        inicio();
+        closeSesion()
+        break;
+    case "cuenta" :
+        cuenta();
+        closeSesion()
+        break;    
+    default:
+        break;
 }
 
-ingreso();
-
-if(exit == true){
-}else{
-    inicio();
-}
