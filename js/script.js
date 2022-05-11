@@ -40,7 +40,7 @@ function getUser(){
     //VALIDACION DE USUARIO Y CONTRASEÑA
     if(userID == userFiltered.user && parseInt(userPass) === userFiltered.pass){
         localStorage.setItem("usuario", userFilteredJSON);
-        window.location.href = 'views/inicio.html';
+        window.location.href = "/views/inicio.html";
     }else{
         let incorrect = document.getElementById("userPassIncorrect")
         incorrect.innerHTML = ""
